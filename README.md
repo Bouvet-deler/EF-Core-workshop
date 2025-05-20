@@ -1,24 +1,54 @@
 # Cookbook
 Shell application used for an intro course to Entity Framework Core
 
-## Tooling
+## Setup
+
 Tooling setup:
-`dotnet tool install --global dotnet-ef`
+```ps
+dotnet tool install --global dotnet-ef
+```
 
-alternatively, if you prefer a specific version:
-`dotnet tool install --global dotnet-ef --version 6.0.1` if you get an unauthorized exception append `--ignore-failed-sources`
+Alternatively, if you prefer a specific version:
+```ps
+dotnet tool install --global dotnet-ef --version 9.0.5
+```
+If you get an unauthorized exception append `--ignore-failed-sources`
 
-`dotnet ef` (See the unicorn?)
+Check the installation:
 
-Migrations:
-`dotnet ef migrations add <name_of_migration>`
+```ps
+dotnet ef
+```
+See the unicorn?
 
-Database Update:
-`dotnet ef database update`
 
-Other useful commands:
-`dotnet ef database update <name_of_migration>` rolls your database back to the specified migration thus allowing you to revert a migration like this
+## Useful commands
 
-`dotnet ef migrations remove` removes the last migration
+Add a new migration:
+```ps
+dotnet ef migrations add <name_of_migration>
+```
 
-`dotnet ef database drop` drops your database. Useful if you have messed up somehow and cannot be bothered trying to fix it
+Update the database to the latest migration:
+```ps
+dotnet ef database update
+```
+
+Update the database to a specific migration:
+```ps
+dotnet ef database update <name_of_migration>
+```
+
+This will revert the database to the specified migration if it is older than the current migration, 
+or apply all migrations between the current migration and the target if it is newer.
+
+Remove the last migration file:
+```ps
+dotnet ef migrations remove
+```
+
+Drops your database:
+```
+dotnet ef database drop
+``` 
+Useful if you have messed up somehow and cannot be bothered trying to fix it.
