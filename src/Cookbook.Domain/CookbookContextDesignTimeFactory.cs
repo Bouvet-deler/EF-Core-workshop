@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Cookbook.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
@@ -35,8 +36,192 @@ public class CookbookContextDesignTimeFactory : IDesignTimeDbContextFactory<Cook
         string connectionString = config.GetConnectionString("CookbookDatabase") ??
                                   throw new Exception("Database connection string required.");
         
-            optionsBuilder.UseSqlServer(connectionString);
-      
+            optionsBuilder
+                .UseSqlServer(connectionString)
+                .UseSeeding((context, _) =>
+                {
+                    bool entitiesAdded = false;
+                    var pancakes = context.Set<Recipe>().FirstOrDefault(recipe => recipe.Name == "Pancakes");
+                    if (pancakes == null)
+                    {
+                        context.Add(new Recipe
+                        {
+                            Id = 0,
+                            Name = "Pancakes",
+                            Ingredients = [
+                                new Ingredient
+                                {
+                                    Name = "Flour",
+                                    Amount = 200,
+                                    UnitId = 1,
+                                },
+                                new Ingredient
+                                {
+                                    Name = "Milk",
+                                    Amount = 300,
+                                    UnitId = 2,
+                                },
+                                new Ingredient
+                                {
+                                    Name = "Egg",
+                                    Amount = 2,
+                                    UnitId = 3,
+                                },
+                            ],
+                            Steps = [
+                                new Step
+                                {
+                                    Description = "Mix flour, milk, and eggs.",
+                                    Order = 1
+                                },
+                                new Step
+                                {
+                                    Description = "Cook the batter in a pan.",
+                                    Order = 2
+                                },
+                            ]
+                        });
+                        entitiesAdded = true;
+                    }
+                    var spaghetti = context.Set<Recipe>().FirstOrDefault(recipe => recipe.Name == "Spaghetti Bolognese");
+                    if (spaghetti == null)
+                    {
+                        context.Add(new Recipe
+                        {
+                            Id = 0,
+                            Name = "Spaghetti Bolognese",
+                            Ingredients =
+                            [
+                                new Ingredient
+                                {
+                                    Name = "Spaghetti",
+                                    Amount = 250,
+                                    UnitId = 1,
+                                },
+                                new Ingredient
+                                {
+                                    Name = "Minced Meat",
+                                    Amount = 500,
+                                    UnitId = 1,
+                                },
+                                new Ingredient
+                                {
+                                    Name = "Tomato Sauce",
+                                    Amount = 400,
+                                    UnitId = 2,
+                                },
+                            ],
+                            Steps =
+                            [
+                                new Step
+                                {
+                                    Description = "Boil spaghetti",
+                                    Order = 1
+                                },
+                                new Step
+                                {
+                                    Description = "Cook minced meat and add tomato sauce.",
+                                    Order = 2
+                                },
+                            ]
+                        });
+                        entitiesAdded = true;
+                    }
+                    if(entitiesAdded)
+                        context.SaveChanges();
+                })
+                .UseAsyncSeeding(async (context, _, cancellationToken) =>
+                {
+                    bool entitiesAdded = false;
+                    var pancakes = await context.Set<Recipe>().FirstOrDefaultAsync(recipe => recipe.Name == "Pancakes", cancellationToken);
+                    if (pancakes == null)
+                    {
+                        context.Add(new Recipe
+                        {
+                            Id = 0,
+                            Name = "Pancakes",
+                            Ingredients = [
+                                new Ingredient
+                                {
+                                    Name = "Flour",
+                                    Amount = 200,
+                                    UnitId = 1,
+                                },
+                                new Ingredient
+                                {
+                                    Name = "Milk",
+                                    Amount = 300,
+                                    UnitId = 2,
+                                },
+                                new Ingredient
+                                {
+                                    Name = "Egg",
+                                    Amount = 2,
+                                    UnitId = 3,
+                                },
+                            ],
+                            Steps = [
+                                new Step
+                                {
+                                    Description = "Mix flour, milk, and eggs.",
+                                    Order = 1
+                                },
+                                new Step
+                                {
+                                    Description = "Cook the batter in a pan.",
+                                    Order = 2
+                                },
+                            ]
+                        });
+                        entitiesAdded = true;
+                    }
+                    var spaghetti = await context.Set<Recipe>().FirstOrDefaultAsync(recipe => recipe.Name == "Spaghetti Bolognese", cancellationToken);
+                    if (spaghetti == null)
+                    {
+                        context.Add(new Recipe
+                        {
+                            Id = 0,
+                            Name = "Spaghetti Bolognese",
+                            Ingredients =
+                            [
+                                new Ingredient
+                                {
+                                    Name = "Spaghetti",
+                                    Amount = 250,
+                                    UnitId = 1,
+                                },
+                                new Ingredient
+                                {
+                                    Name = "Minced Meat",
+                                    Amount = 500,
+                                    UnitId = 1,
+                                },
+                                new Ingredient
+                                {
+                                    Name = "Tomato Sauce",
+                                    Amount = 400,
+                                    UnitId = 2,
+                                },
+                            ],
+                            Steps =
+                            [
+                                new Step
+                                {
+                                    Description = "Boil spaghetti",
+                                    Order = 1
+                                },
+                                new Step
+                                {
+                                    Description = "Cook minced meat and add tomato sauce.",
+                                    Order = 2
+                                },
+                            ]
+                        });
+                        entitiesAdded = true;
+                    }
+                    if(entitiesAdded)
+                        await context.SaveChangesAsync(cancellationToken);
+                });
         
         return new CookbookContext(optionsBuilder.Options);
     }

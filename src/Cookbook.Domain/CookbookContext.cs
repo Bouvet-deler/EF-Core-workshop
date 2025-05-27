@@ -36,5 +36,16 @@ public class CookbookContext(DbContextOptions<CookbookContext> builderOptions) :
             .Property(b => b.Name)
             .HasMaxLength(100)
             .IsRequired();
+        
+        AddFactTableData(modelBuilder);
+    }
+
+    private static void AddFactTableData(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Unit>()
+            .HasData(
+                new Unit {Id = 1, Name = "Gram" }, 
+                new Unit {Id = 2, Name = "Milliliter" }, 
+                new Unit {Id = 3, Name = "Piece" });
     }
 }
