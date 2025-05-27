@@ -26,7 +26,7 @@ See the unicorn?
 
 Add a new migration:
 ```ps
-dotnet ef migrations add <name_of_migration>
+dotnet ef migrations add name_of_migration
 ```
 
 Update the database to the latest migration:
@@ -36,7 +36,7 @@ dotnet ef database update
 
 Update the database to a specific migration:
 ```ps
-dotnet ef database update <name_of_migration>
+dotnet ef database update name_of_migration
 ```
 
 This will revert the database to the specified migration if it is older than the current migration, 
