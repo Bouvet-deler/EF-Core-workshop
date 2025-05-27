@@ -21,6 +21,10 @@ dotnet ef
 ```
 See the unicorn?
 
+## Tasks
+
+Do the tasks [here](./Tasks.md).
+
 
 ## Useful commands
 
